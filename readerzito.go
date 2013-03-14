@@ -1,6 +1,11 @@
 package main
 
-import "time"
+import (
+	"labix.org/v2/mgo"
+	"time"
+)
+
+var collection *mgo.Collection
 
 type user struct {
 	name  string
@@ -8,8 +13,8 @@ type user struct {
 }
 
 type feed struct {
-	name  string
-	url   string
+	Name  string
+	Url   string
 	items []feeditem
 }
 
@@ -18,4 +23,10 @@ type feeditem struct {
 	content string
 	date    time.Time
 	url     string
+}
+
+// subscribe stores a feed.
+func subscribe(name, url string) error {
+	f := feed{Name: name, Url: url}
+	return collection.Insert(f)
 }
